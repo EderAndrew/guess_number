@@ -1,16 +1,18 @@
-import React, {useState} from 'react'
+import React, {useState, lazy} from 'react'
 import {
     View,
     StyleSheet,
     Text,
     TouchableWithoutFeedback,
-    Keyboard
+    Keyboard,
+    Alert,
 } from 'react-native'
 
-//Import componentscd here
+//Import components here
 import Card from '../components/Card/Card.component'
 import ButtonComponent from '../components/Button/Button.component'
 import InputComponent from '../components/Input/Input.component'
+import NumberContainer from '../components/NumberContainer/NumberContainer.component'
 import Colors from '../constants/colors.constants'
 
 
@@ -30,18 +32,40 @@ const StartGameScreen = props => {
 
     const confirmInputHandler = () => {
         const chosenNumber = parseInt(enteredValue)
-        if(chosenNumber === NaN || chosenNumber <= 0 || chosenNumber > 99){
+        if(isNaN(chosenNumber) || chosenNumber <= 0 || chosenNumber > 99){
+            Alert.alert(
+                'Invalid number!',
+                'Number has to be a number between 1 and 99.',
+                [
+                    {
+                        text: 'Okay',
+                        style: 'destructive',
+                        onPress: resetInputHandler
+                    }
+                ]
+            )
             return
         }
         setConfirmed(true)
         setSelectNumber(parseInt(enteredValue))
         setEnteredValue('')
+        Keyboard.dismiss()
     }
 
     let confirmedOutput
 
     if(confirmed){
-        confirmedOutput = <Text>Chosen Number: {selectedNumber}</Text>
+        confirmedOutput = (
+            <Card style={styles.summaryContainer}>
+                <Text>You selected</Text>
+                <NumberContainer>{selectedNumber}</NumberContainer>
+                <ButtonComponent
+                  title="START GAME"
+                  style={{backgroundColor: Colors.primary, width: 120}}
+                  onPress={() => props.onStartGame(selectedNumber)}
+                />
+            </Card>
+        )
     }
 
     return(
@@ -107,6 +131,10 @@ const styles = StyleSheet.create({
         width: 50,
         textAlign: 'center',
         height:40
+    },
+    summaryContainer:{
+        marginTop: 20,
+        alignItems: 'center'
     }
 })
 
