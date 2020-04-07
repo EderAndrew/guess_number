@@ -13,6 +13,7 @@ import Card from '../components/Card/Card.component'
 import ButtonComponent from '../components/Button/Button.component'
 import InputComponent from '../components/Input/Input.component'
 import NumberContainer from '../components/NumberContainer/NumberContainer.component'
+import BodyText from '../components/BodyText/BodyText.component'
 import Colors from '../constants/colors.constants'
 
 
@@ -75,7 +76,7 @@ const StartGameScreen = props => {
             <View style={styles.container}>
                 <Text style={styles.title}>Start New Game!</Text>
                 <Card style={styles.inputContainer}>
-                    <Text>Select a number</Text>
+                    <BodyText>Select a number</BodyText>
                     <InputComponent
                     style={styles.input}
                     blurOnSubmit
@@ -115,6 +116,7 @@ const styles = StyleSheet.create({
     title:{
         fontSize: 20,
         marginVertical: 10,
+        fontFamily:'RobotoCondensed-Bold'
     },
     inputContainer:{
         width: 300,
@@ -135,7 +137,7 @@ const styles = StyleSheet.create({
     summaryContainer:{
         marginTop: 20,
         alignItems: 'center'
-    }
+    },
 })
 
 export default StartGameScreen
