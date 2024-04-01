@@ -1,7 +1,9 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, ImageBackground, SafeAreaView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useFonts } from 'expo-font'
+import * as SplashScreen from 'expo-splash-screen'
 
 import { StartGameScreen } from './src/screens/StartGameScreen';
 import { GameScreen } from './src/screens/GameScreen';
@@ -13,6 +15,22 @@ import { Colors } from './src/utils/colors';
 export default function App() {
   const [userNumber, setUserNumber] = useState('');
   const [gameIsOver, setGameIsOver] = useState(true);
+  const [guessRounds, setGuessRounds] = useState(0);
+
+  const [fontsLoaded] = useFonts({
+    'open-sans': require('./assets/fonts/OpenSans-Regular.ttf'),
+    'open-sans-bold': require('./assets/fonts/OpenSans-Bold.ttf'),
+  })
+
+  const onLayout = useCallback(() => {
+    if(fontsLoaded){
+      SplashScreen.hideAsync()
+    }
+  }, [fontsLoaded])
+
+  if(!fontsLoaded){
+    return null;
+  }
 
   const pickedNumberHandler = (pickedNumber: number) => {
     setUserNumber(pickedNumber.toString());
@@ -23,6 +41,11 @@ export default function App() {
     setGameIsOver(true);
   }
 
+  const startNewGameHandler = () => {
+    setUserNumber('');
+    setGuessRounds(0)
+  }
+
   let screen = <StartGameScreen onPickNumber={pickedNumberHandler}/>;
 
   if(userNumber){
@@ -30,7 +53,7 @@ export default function App() {
   }
 
   if(gameIsOver && userNumber){
-    screen = <GameOverScreen />
+    screen = <GameOverScreen userNumber={parseInt(userNumber)} roundersNumber={guessRounds} onStartNewGame={startNewGameHandler}/>
   }
 
 
@@ -42,7 +65,7 @@ export default function App() {
         style={styles.rootScreen}
         imageStyle={styles.backgroundImage}
       >
-        <SafeAreaView>{screen}</SafeAreaView>
+        <SafeAreaView onLayout={onLayout}>{screen}</SafeAreaView>
       </ImageBackground>
       <StatusBar style="auto" />
     </LinearGradient>
