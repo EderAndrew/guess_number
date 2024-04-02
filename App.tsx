@@ -66,9 +66,9 @@ export default function App() {
         style={styles.rootScreen}
         imageStyle={styles.backgroundImage}
       >
-        <SafeAreaView onLayout={onLayout}>{screen}</SafeAreaView>
+        <SafeAreaView onLayout={onLayout} style={styles.rootScreen}>{screen}</SafeAreaView>
       </ImageBackground>
-      <StatusBar style="auto" />
+      <StatusBar style="light" />
     </LinearGradient>
   );
 }

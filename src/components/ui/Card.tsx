@@ -1,5 +1,6 @@
 import { StyleSheet, View } from "react-native"
 import { Colors } from "../../utils/colors"
+import { deviceWidth } from "../../utils/dimensions"
 
 type Props = {
     children: React.ReactNode
@@ -16,7 +17,7 @@ const styles = StyleSheet.create({
     inputContainer:{
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 100,
+        marginTop: deviceWidth < 380 ? 18: 36,
         padding: 16,
         marginHorizontal: 24,
         backgroundColor: Colors.primary800,

@@ -1,10 +1,11 @@
-import { SafeAreaView, View, TextInput, StyleSheet, Alert } from "react-native"
+import { SafeAreaView, View, TextInput, StyleSheet, Alert, useWindowDimensions, KeyboardAvoidingView, ScrollView } from "react-native"
 import { PrimaryButton } from "../components/ui/PrimaryButton"
 import { useState } from "react"
 import { Colors } from "../utils/colors"
 import { Title } from "../components/ui/Title"
 import { Card } from "../components/ui/Card"
 import { InstructionText } from "../components/ui/InstructionText"
+import { deviceHeight } from "../utils/dimensions"
 
 type Props ={
     onPickNumber: (number: number) => void
@@ -12,6 +13,8 @@ type Props ={
 
 export const StartGameScreen = ({onPickNumber}:Props) => {
     const [enteredNumber, setEnteredNumber] = useState('')
+
+    const { width, height } = useWindowDimensions()
 
     const confirmNumberHandler = () => {
         const chooseNumber = parseInt(enteredNumber)
@@ -29,37 +32,46 @@ export const StartGameScreen = ({onPickNumber}:Props) => {
     const resetNumberHandler = () => {
         setEnteredNumber('')
     }
+
+    const marginTopDistance = height < 380 ? 30 : 100
+    
     return(
-        <SafeAreaView style={styles.rootContainer}>
-            <Title>Guess My number</Title>
-            <Card>
-                <InstructionText>Enter a Number</InstructionText>
-                <TextInput
-                    style={styles.numberInput}
-                    maxLength={2}
-                    keyboardType="number-pad"
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    onChangeText={number => setEnteredNumber(number)}
-                    value={enteredNumber}
-                />
-                <View style={styles.buttonsContainer}>
-                    <View style={styles.buttonContainer}>
-                        <PrimaryButton onPress={resetNumberHandler}>Reset</PrimaryButton>
-                    </View>
-                    <View style={styles.buttonContainer}>
-                        <PrimaryButton onPress={confirmNumberHandler}>Confirm</PrimaryButton>
-                    </View>
+        <ScrollView style={styles.screen}>
+            <KeyboardAvoidingView style={styles.screen} behavior="position">
+             <View style={[styles.rootContainer, {marginTop: marginTopDistance}]}>
+                <Title>Guess My number</Title>
+                    <Card>
+                        <InstructionText>Enter a Number</InstructionText>
+                        <TextInput
+                            style={styles.numberInput}
+                            maxLength={2}
+                            keyboardType="number-pad"
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            onChangeText={number => setEnteredNumber(number)}
+                            value={enteredNumber}
+                        />
+                        <View style={styles.buttonsContainer}>
+                            <View style={styles.buttonContainer}>
+                                <PrimaryButton onPress={resetNumberHandler}>Reset</PrimaryButton>
+                            </View>
+                            <View style={styles.buttonContainer}>
+                                <PrimaryButton onPress={confirmNumberHandler}>Confirm</PrimaryButton>
+                            </View>
+                        </View>
+                    </Card> 
                 </View>
-            </Card> 
-        </SafeAreaView>
-        
+            </KeyboardAvoidingView>
+        </ScrollView>
     )
 }
 
 const styles = StyleSheet.create({
+    screen:{
+        flex: 1
+    },
     rootContainer:{
-        marginTop: 100,
+        marginTop: deviceHeight < 400 ? 30 : 100,
         alignItems: 'center',
     },
     
